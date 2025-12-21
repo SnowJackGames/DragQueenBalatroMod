@@ -1,0 +1,2 @@
+One spritesheet for regular boss blinds
+One spritesheet for showdown boss blinds

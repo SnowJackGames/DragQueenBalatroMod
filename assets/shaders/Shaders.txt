@@ -1,0 +1,3 @@
+F# Source File for each edition shader
+Or other needed shaders
+Glitter from Bunco added for reference / implementation

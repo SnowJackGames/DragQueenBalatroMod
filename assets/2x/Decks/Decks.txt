@@ -1,0 +1,2 @@
+One sprite sheet for Drag Queen decks specifically
+One sprite sheet for any modded deck face implementation

@@ -1,0 +1,3 @@
+Aces, Jacks, Kings, and Queens skins for different suit
+Each suit version and high contrast vs low contrast gets their own spritesheet
+Ex. Drag Queen Diamonds, high contrast and low contrast
