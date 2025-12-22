@@ -1,8 +1,0 @@
-Each gets one spritesheet each
-Tarot
-RotatedTarot
-Planets
-Spectrals
-Voucers
-Tags
-Packs

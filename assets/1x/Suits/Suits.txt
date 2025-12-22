@@ -1,5 +1,15 @@
 One spritesheet for both Purses and Pumps cards (including Mother)
 One each for high contrast, low contrast
+Name them:
+	purselc.png
+	pursehc.png
+	pumplc.png
+	pumphc.png
 One spritesheet for the Purse and Pump suit symbols
+Name them:
+	pursesuiticonlc.png
+	pursesuiticonhc.png
+	pumpsuiticonlc.png
+	pumpsuiticonhc.png
 One spritesheet for Mothers of other mods' suits (ex. Mother of Halberds)
 One each for high contrast, low contrast

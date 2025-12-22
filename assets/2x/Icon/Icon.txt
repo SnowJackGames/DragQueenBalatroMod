@@ -1,1 +1,0 @@
-One sprite (or spritesheet) for the icon that appears in mod menu

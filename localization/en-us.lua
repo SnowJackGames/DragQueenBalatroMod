@@ -5,27 +5,26 @@
 -- Avoid end-punctuation
 -- Strings in double-quotes, not single quotes
 
--- Figure out what where stuff like {C:hearts}Hearts{} etc are stored
--- Using:
+-- Colors implemented in lovely/colors.toml
     -- {C:hearts}
     -- {C:diamonds}
     -- {C:spades}
     -- {C:clubs}
     -- {C:attention}
     -- {C:red}
-    -- {C:pumps}
-    -- {C:purses}
+    -- {C:dragqueen_pumps}
+    -- {C:dragqueen_purses}
     -- {C:bunc_fleurons}
     -- {C:bunc_halberds}
     -- {C:paperback_crowns}
     -- {C:paperback_stars}
-    -- {C:sixsuits_moons}
-    -- {C:sixsuits_stars}
+    -- {C:six_moons}
+    -- {C:six_stars}
     -- {C:minty_3s}
-    -- {C:magic_forests}
-    -- {C:magic_suitless}
-    -- {C:inkandcolor_ink}
-    -- {C:inkandcolor_color}
+    -- {C:clover}
+    -- {C:FFFFFF} for Suitless
+    -- {C:black,E:1,S:1.1} for Ink
+    -- {C:C:purple,E:1,S:1.1} for Color
 
 
 return {
@@ -99,7 +98,7 @@ return {
             dragqueen_accessory_suits = {
                 name = "Accessory suits",
                 text = {
-                    "{C:purses}Purses{} and{C:pumps}Pumps{}"
+                    "{C:dragqueen_purses}Purses{} and{C:dragqueen_pumps}Pumps{}"
                 }
             },
             -- Implemented by Bunco
@@ -123,7 +122,7 @@ return {
             sixsuits_night_suits = {
                 name = "Night suits",
                 text = {
-                    "{C:sixsuits_moons}Moons{} and {C:sixsuits_stars}Stars{}"
+                    "{C:six_moons}Moons{} and {C:six_stars}Stars{}"
                 }
             },
             -- Implemented by Minty's Silly Little Mod
@@ -139,7 +138,7 @@ return {
             magic_magic_suits = {
                 name = "Magic suits",
                 text = {
-                    "{C:magic_forests}Forests{} and {C:magic_suitless}Suitless{}"
+                    "{C:clover}Clovers{} and {C:FFFFFF}Suitless{}"
                 }
             },
             -- Implemented by Ink and Color
@@ -147,14 +146,7 @@ return {
             inkandcolor_stained_suits = {
                 name = "Stained suits",
                 text = {
-                    "{C:inkandcolor_ink}Ink{} and {C:inkandcolor_color}Color{}"
-                }
-            },
-            -- For suit-clarifying tooltips
-            dragqueen_suit_conjunction = {
-                name = "Conjunction",
-                text = {
-                    "and"
+                    "{C:black,E:1,S:1.1}Ink{} and {C:purple,E:1,S:1.1}Color{}"
                 }
             },
             -- When deck only has plain suits
@@ -174,7 +166,7 @@ return {
             dragqueen_dark_suits_accessory = {
                 name = "Accessory dark suits",
                 text = {
-                    "{C:purses}Purses{}"
+                    "{C:dragqueen_purses}Purses{}"
                 }
             },
             -- Bunco
@@ -195,14 +187,14 @@ return {
             sixsuits_dark_suits_night = {
                 name = "Night dark suits",
                 text = {
-                    "{C:sixsuits_moons}Moons{}"
+                    "{C:six_moons}Moons{}"
                 }
             },
             -- Ink and Color
             inkandcolor_dark_suits_stained = {
                 name = "Stained dark suits",
                 text = {
-                    "{C:inkandcolor_ink}Ink{}"
+                    "{C:black,E:1,S:1.1}Ink{}"
                 }
             },
             -- When deck only has plain suits
@@ -222,7 +214,7 @@ return {
             dragqueen_light_suits_accessory = {
                 name = "Accessory light suits",
                 text = {
-                    "{C:pumps}Pumps{}"
+                    "{C:dragqueen_pumps}Pumps{}"
                 }
             },
             -- Bunco
@@ -243,7 +235,7 @@ return {
             sixsuits_light_suits_night = {
                 name = "Night light suits",
                 text = {
-                    "{C:sixsuits_stars}Stars{}"
+                    "{C:six_stars}Stars{}"
                 }
             },
             -- Minty's Silly Little Mod
@@ -257,7 +249,7 @@ return {
             inkandcolor_light_suits = {
                 name = "Stained light suits",
                 text = {
-                    "{C:inkandcolor_color}Color{}"
+                    "{C:purple,E:1,S:1.1}Color{}"
                 }
             }
         },
@@ -406,5 +398,47 @@ return {
         Keywords = {
             -- Suit and rank specific 
         }
+    },
+    grammar = {
+        -- For suit-clarifying tooltips
+        -- Making lists universal to different languages is hard
+        -- https://linguistics.stackexchange.com/questions/17251/how-do-languages-other-than-english-form-lists-of-words
+        -- Given A...Z as nouns, and numbers being coordinators /conjunction
+        -- [1]A[2]B... M[3]N[3]O...Y[4]Z[5]
+        -- English for example, uses no coordinator at position [1], uses a comma and a space for position types [2] and [3]
+        -- Position 4 being ", and ", no coordinator for position 5
+        -- Russia does not use an oxford comma, so position 4 would be just " and "
+        -- This superfluous implementation *theoretically* makes translating this mod to say Classical Tibetan, Martuthunira, etc 
+        dragqueen_suit_conjunction1 = {
+            name = "Conjunction1",
+            text = {
+                ""
+            }
+        },
+        dragqueen_suit_conjunction2 = {
+            name = "Conjunction2",
+            text = {
+                ", "
+            }
+        },
+        dragqueen_suit_conjunction3 = {
+            name = "Conjunction3",
+            text = {
+                ", "
+            }
+        },
+        -- Between two final items in list, en-us using oxford comma
+        dragqueen_suit_conjunction4 = {
+            name = "Conjunction4",
+            text = {
+                ", and "
+            }
+        },
+        dragqueen_suit_conjunction5 = {
+            name = "Conjunction5",
+            text = {
+                ""
+            }
+        },
     }
 }

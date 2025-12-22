@@ -1,0 +1,22 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# Drag Queen mod specific
+[[patches]]
+[patches.pattern]
+target = "globals.lua"
+pattern = "RENTAL = HEX('b18f43'),"
+position = "after"
+match_indent = true
+payload = '''
+DRAGQUEEN_LIGHT_SUIT = HEX('F06841'),
+DRAGQUEEN_DARK_SUIT = HEX('3C4A4E'),
+'''
+# To put inside the triple quote above:
+# DRAGQUEEN_PUMPS_LC = HEX(""),
+# DRAGQUEEN_PUMPS_HC = HEX(""),
+# DRAGQUEEN_PURSES_LC = HEX(""),
+# DRAGQUEEN_PURSES_LC = HEX(""),
+# any other colors we wanna make
