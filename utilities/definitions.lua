@@ -30,7 +30,7 @@ DRAGQUEENMOD.SUITS_CATEGORIES = {
     "Dark"
 }
 
-DDRAGQUEENMOD.BASE_RANKS = {
+DRAGQUEENMOD.BASE_RANKS = {
   "Ace",
   "King",
   "Queen",

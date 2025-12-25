@@ -1,46 +1,12 @@
 -- Create config UI
-SMODS.current_mod.config_tab = function()
-    return {
-    }
-end
+
 
 
 -- Create Credits tab in our mod UI
-SMODS.current_mod.extra_tabs = function()
-end
 
 -- Create collection entries for Kisses
 
--- Determines if current deck is playing with anything other than "plain suits" (spades, hearts, clubs, diamonds)
--- If so then we want to communicate this to things communicating what light and dark suits are there available
--- Maybe we'll come up with a better term than "non-plain"
-function DRAGQUEENMOD.enable_non_plains()
-  if G.GAME then G.GAME.NonPlain = true
-  end
-end
 
-function DRAGQUEENMOD.disable_non_plains()
-  if G.GAME then G.GAME.NonPlain = false
-  end
-end
-
-function DRAGQUEENMOD.non_plain_in_pool()
-  if G.GAME and G.GAME.NonPlain then return true
-  end
-  -- In case a spectrum somehow gets played without enabling non_plains, check directly:
-  local spectrum_played = false
-    if G and G.GAME and G.GAME.hands then
-        for k, v in pairs(G.GAME.hands) do
-            if string.find(k, "Spectrum", nil, true) then
-                if G.GAME.hands[k].played > 0 then
-                    spectrum_played = true
-                    break
-                end
-            end
-        end
-    end
-    return spectrum_played
-end
 
 -- Returns a table that can be inserted into info_queue to show all suits of the provided type
 --- @param type
@@ -59,8 +25,12 @@ function DRAGQUEENMOD.suit_tooltip(type)
   local key = "dragqueen_"
   local colours = {}
 
-  local modprefixes = {
-    ["exotic"] = "bunco_",
+  -- every type but light and dark has a clear-cut answer
+  -- "plain" and "accessory" don't have a mod prefix bc they're only referenced in our mod
+  local suit_types_to_mod_prefixes = {
+    ["plain"] = "",
+    ["accessory"] = "",
+    ["exotic"] = "bunc_",
     ["proud"] = "paperback_",
     ["night"] = "six_",
     ["treat"] = "minty_",
@@ -70,41 +40,133 @@ function DRAGQUEENMOD.suit_tooltip(type)
 
   -- convention in our localization file for referencing other mods
   -- ex. dragqueen_bunco_exotic_suits
-  for modtype, modprefix in pairs(modprefixes) do
+  for modtype, modprefix in pairs(suit_types_to_mod_prefixes) do
     if modtype == type then
-      key = key .. modprefix .. type
+      key = key .. modprefix .. type .. "_suits"
     end
   end
 
-    -- every type but light and dark has a clear-cut answer
-    -- if type is light or dark:
-    -- if the only suits in play (i think in G.GAME?) are plain (Clubs, Hearts, Spades, Diamonds)
-    -- then only show G.localization.descriptions.dragqueen_dark_suits_vanilla.
-    -- or etc light_suits_vanilla
-    -- HOWEVER: if there are other suits in play then we gotta check each mod
-    -- if *one* of the suits from a cross mod is in play, consider all cross mod suits in play
-    -- you'll have to reference G.localization.grammar for list
-    -- see the en-us.lua notes
-    if type == "dark" or "light" then
-      local suits = type == "light" and DRAGQUEENMOD.light_suits or DRAGQUEENMOD.dark_suits
-      -- if playing with only plain suits output plain light and dark suits
-      -- if playing with non-plain suits output all light and dark suits available
-      -- checking if a mod exists with next(SMODS.find_mod("Bunco")) or 
-      -- put coordinators in proper list place
+  -- if type is light or dark:
+  -- if the only suits in play (in G.GAME) are plain (Clubs, Hearts, Spades, Diamonds)
+  -- then only show G.localization.descriptions.dragqueen_dark_suits_vanilla
+  -- or etc light_suits_vanilla
+  -- HOWEVER: if there are other suits in play then we gotta check each mod
+  -- if *one* of the non-plain suits are in play, consider all cross mod suits in play
+  -- see the en-us.lua notes
+  if type == "dark" or "light" then
+    local suits = type == "light" and DRAGQUEENMOD.light_suits or DRAGQUEENMOD.dark_suits
+    -- if playing with only plain suits, only display the vanilla suits; ex. dragqueen_vanilla_dark_suits
+    if not G.GAME.NonPlain then
+      key = key .. "vanilla_" .. type .. "_suits"
+      
+    -- Since any modded suits are in play, we consider all of them in play
+    -- Let's dynamically add them all to localization, first figuring out what mods even there are
+    else
+      local mod_names = {
+        "Bunco",
+        "Paperback",
+        "SixSuits",
+        "MintysSillyMod",
+        "magic_the_jokering",
+        "InkAndColor"
+      }
+      local mods_in_play = {}
 
+      -- Let's first figure out what mods are even installed
+      for _, modname in ipairs(mod_names) do
+        if next(SMODS.find_mod(modname)) then
+          table.insert(mods_in_play, modname)
+        end
+      end
+
+      -- Referencing G.localization.grammar for conjunction order
+      -- Starting out with adding the vanilla and drag queen suits
+      -- Each item in messageparts is a table of text tables
+      local messageparts = {
+        DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction1").text,
+        DRAGQUEENMOD.easydescriptionlocalize("Suit","dragqueen_vanilla_plus_" .. type .. "_suits").text,
+      }
+      if #suits == 3 then
+        table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction4").text)
+        table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Suit", "dragqueen_accessory_" .. type .. "_suits").text)
+      else
+        table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction3"))
+        table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Suit", "dragqueen_accessory_" .. type .. "_suits").text)
+
+        -- Now, if there's any modded suits we add those to messageparts
+        for _, modname in ipairs(mods_in_play) do
+          -- i.e. last modded suit to be added
+          if DRAGQUEENMOD.indexof(mods_in_play, modname) == #(suits - 3) then
+            table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction4").text)
+            table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Suit", "dragqueen_" .. DRAGQUEENMOD.guessedprefix(modname) .. "_" .. type .. "_suits").text)
+          -- i.e. there's more modded suits after this one
+          else
+            table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction3").text)
+            table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Suit", "dragqueen_" .. DRAGQUEENMOD.guessedprefix(modname) .. "_" .. type .. "_suits").text)
+          end
+        end
+        table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction5").text)
+      end
+
+      -- Now we have all the messageparts, let's extract the strings from the text tables
+      local messagestrings = {}
+      for _, texttable in ipairs(mods_in_play) do
+        for _, textstring in ipairs(texttable) do
+          table.insert(messagestrings, textstring)
+        end
+      end
+      
+      -- Now we take all those strings and put them into "lines" of text that you'd see on the screen. We don't want those to be overly long
+      local line = ""
+      local text = {}
+      for _, textstring in ipairs(messagestrings) do
+        -- Line has room, we can keep typing
+        if line < 30 then
+          line = line .. textstring
+        -- Typewriter goes "ding!", next line
+        else
+          text[#text+1] = line
+          line = ""
+        end
+      end
+
+      -- Put the last line in
+      if #line > 0 then
+        text[#text + 1] = line
+      end
+
+      -- We also gotta get all the "colours" for the suits
+      for i = 1, #suits do
+        local suit = suits [i]
+        colours[#colours+1] = G.C.SUITS[suit] or G.C.IMPORTANT
+      end
+
+      -- For the grand finale we take our table of text and give it back to localization
+      -- I might have to do something with .text_parsed format and loc_parse_string? I hope giving it the same text is okay
+      if type == "dark" then
+        G.localization.descriptions.Suit.dragqueen_dark_suits_in_play.text = text
+        G.localization.descriptions.Suit.dragqueen_dark_suits_in_play.text_parsed = text
+        key = "dragqueen_dark_suits_in_play"
+      else
+        G.localization.descriptions.Suit.dragqueen_light_suits_in_play.text = text
+        G.localization.descriptions.Suit.dragqueen_light_suits_in_play.text_parsed = text
+        key = "dragqueen_light_suits_in_play"
+      end
     end
-  
+  end
 
 
   return {
     -- Balatro's functions/common_events.lua:function generate_card_ui() builds a full_UI_table.name
     -- which is parsed with Balatro's functions/misc_functions.lua:function localize(args, misc_cat)
-    -- The easiest way to find a table inside of Balatro's localization/en-us.lua description table (or any other language file)
-    -- is to use "name_text" when this erturn is passed to full_UI_table.name and then localize()
+    -- This return gets sent to localize() with type "descriptions", and using the suit and key the text table is given to loc_target
+
     -- "Colours" here comes from Balatro's own Canadian code
-    type = 'name_text',
+    -- It might be needed to pass in the ex. "{V:1}Spades{}" format?
+    -- If that's the case I'll need to reformat the above from the {C:Dragqueen_Purses}Purses{}" format
+    type = "descriptions",
     set = "Suit",
-    key = key .. "_suits",
+    key = key,
     vars = {
       colours = colours
     }

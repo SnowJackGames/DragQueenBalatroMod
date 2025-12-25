@@ -10,7 +10,7 @@ end
 
 -- Fetches the current used prefix for a loaded mod if that prefix has recently changed
 ---@param name string
----@param guessedprefix string
+---@param guessedprefix string | nil
 local function getprefix(name, guessedprefix)
   local foundprefix = SMODS.find_mod(name)[1].prefix or guessedprefix
   return foundprefix
@@ -83,7 +83,7 @@ function DRAGQUEENMOD.cross_mod_content_register()
 
   -- Magic: The Jokering
   if next(SMODS.find_mod("magic_the_jokering")) then
-    local prefix = SMODS.find_mod("magic_the_jokeringMintysSillyMod")[1].prefix or "mtg"
+    local prefix = SMODS.find_mod("magic_the_jokering")[1].prefix or "mtg"
 
     DRAGQUEENMOD.magic_suits = {prefix .. "_Clovers", prefix .. "_Suitless"}
     -- Add Mothers
