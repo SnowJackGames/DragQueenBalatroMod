@@ -33,10 +33,10 @@ if DRAGQUEENMOD.should_load_spectrum_items() then
 end
 
 -- Modifiers
-DRAGQUEENMOD.register_items(DRAGQUEENMOD.ENHANCEMENTS, "content/Modifiers/Enhancements")
-DRAGQUEENMOD.register_items(DRAGQUEENMOD.EDITIONS, "content/Modifiers/Editions")
-DRAGQUEENMOD.register_items(DRAGQUEENMOD.STICKERS, "content/Modifiers/Stickers")
-DRAGQUEENMOD.register_items(DRAGQUEENMOD.KISSES, "content/Modifiers/Kisses")
+DRAGQUEENMOD.register_items(DRAGQUEENMOD.MODIFIERS.ENHANCEMENTS, "content/Modifiers/Enhancements")
+DRAGQUEENMOD.register_items(DRAGQUEENMOD.MODIFIERS.EDITIONS, "content/Modifiers/Editions")
+DRAGQUEENMOD.register_items(DRAGQUEENMOD.MODIFIERS.STICKERS, "content/Modifiers/Stickers")
+DRAGQUEENMOD.register_items(DRAGQUEENMOD.MODIFIERS.KISSES, "content/Modifiers/Kisses")
 
 
 -- Consumables
