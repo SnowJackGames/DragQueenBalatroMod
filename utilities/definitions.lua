@@ -19,7 +19,7 @@ DRAGQUEENMOD.credits = {
     artists = {
         color = G.C.MULT,
         entries = {
-            "SnowJackGames",
+            "birdofalltrades",
             "lasagen"
         }
     },
