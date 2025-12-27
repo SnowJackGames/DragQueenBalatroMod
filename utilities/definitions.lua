@@ -6,6 +6,7 @@ SMODS.current_mod.optional_features = {
   retrigger_joker = true,
   post_trigger = true,
   quantum_enhancements = true,
+  cardareas = {deck = true}
 }
 
 -- Update values that get reset at the start of each round

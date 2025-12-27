@@ -56,7 +56,9 @@ function DRAGQUEENMOD.cross_mod_content_register()
 
 
     -- Look into their utilities/ui.lua/PB_UTIL.suit_tooltip(type)
-    -- Might just override their tooltip with our own if it is easier
+    -- Might just override their tooltip with our own if it is easier?
+    -- SMODS.Mods["paperback"].PB_UTIL.suit_tooltip = DRAGQUEENMOD.suit_tooltip
+    -- Might need to change priority
     -- Add paperclips to modifiers
     -- Add their ranks
     -- Add Mothers, which also count as Apostles

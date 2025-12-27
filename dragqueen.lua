@@ -30,6 +30,7 @@ DRAGQUEENMOD.register_items(DRAGQUEENMOD.SUITS, "content/Suits")
 DRAGQUEENMOD.register_items(DRAGQUEENMOD.RANKS, "content/Ranks")
 if DRAGQUEENMOD.should_load_spectrum_items() then
     DRAGQUEENMOD.register_items(DRAGQUEENMOD.POKER_HANDS, "content/Poker_Hands")
+    DRAGQUEENMOD.register_items(DRAGQUEENMOD.CONSUMABLES.PLANETS, "content/Consumables/Planets")
 end
 
 -- Modifiers
