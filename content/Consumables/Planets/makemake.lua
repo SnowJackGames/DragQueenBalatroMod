@@ -7,6 +7,6 @@ PB_UTIL.Planet {
   is_dwarf = true,
   config = {
     hand_type = 'dragqueen_Spectrum Five',
-    softlock = true,
+    softlock = true
   }
 }

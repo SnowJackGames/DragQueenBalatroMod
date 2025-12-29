@@ -12,6 +12,7 @@ end
 ---@param name string
 ---@param guessedprefix string | nil
 local function getprefix(name, guessedprefix)
+  assert(next(SMODS.find_mod(name)), "mod \"" .. name .. "\" not found in SMODS.find_mod()")
   local foundprefix = SMODS.find_mod(name)[1].prefix or guessedprefix
   return foundprefix
 end 
@@ -19,8 +20,10 @@ end
 
 -- Searching for other mods for cross-mod content and integration
 function DRAGQUEENMOD.cross_mod_content_register()
+  sendInfoMessage("Running cross mod content register", "Drag Queen Mod Info Logger")
 -- Bunco
   if next(SMODS.find_mod("Bunco")) then
+    sendInfoMessage("found Bunco", "Drag Queen Mod Info Logger")
     local prefix = getprefix("Bunco", "bunc")
     table.insert(DRAGQUEENMOD.dark_suits, prefix .. "_Halberds")
     table.insert(DRAGQUEENMOD.light_suits, prefix .. "_Fleurons")
@@ -38,8 +41,9 @@ function DRAGQUEENMOD.cross_mod_content_register()
   end
 
   -- Paperback
-  if next(SMODS.find_mod("Paperback")) then
-    local prefix = getprefix("Paperback", "paperback")
+  if next(SMODS.find_mod("paperback")) then
+    sendInfoMessage("Paperback found", "Drag Queen Mod Info Logger")
+    local prefix = getprefix("paperback", "paperback")
 
     -- Adds their suits to our definitions of light and dark and proud
     table.insert(DRAGQUEENMOD.dark_suits, prefix .. "_Crowns")
@@ -47,11 +51,18 @@ function DRAGQUEENMOD.cross_mod_content_register()
     DRAGQUEENMOD.proud_suits = {prefix .. "_Crowns", prefix .. "_Stars"}
 
     -- If their definition of light and dark don't already reference our suits, they now do
-    if next(PB_UTIL.dark_suits("dragqueen_Purses")) == false then
-      table.insert(PB_UTIL.dark_suits, "dragqueen_Purses")
-    end
-    if next(PB_UTIL.dark_suits("dragqueen_Pumps")) == false then
-      table.insert(PB_UTIL.light_suits, "dragqueen_Pumps")
+    -- We have to find their definition relative to the player's mod install
+    local paperback_path = tostring(SMODS.Mods["paperback"].path)
+    local paperback_cross_mod_path = string.gsub(paperback_path, ".paperback.lua", "") .. "utilities/cross-mod.lua"
+    local paperback_cross_mod_file = assert(io.open(paperback_cross_mod_path,"r"), "Couldn't understand Paperback path")
+    -- If there's no mention of the Drag Queen mod, then they're probably not implementing us
+    -- A silly fix but I think grounded in logic
+    if paperback_cross_mod_file then
+      local paperback_cross_mod_content = paperback_cross_mod_file:read("*a")
+      if not string.find(paperback_cross_mod_content, "dragqueen") then
+        paperback_cross_mod_content = nil
+        DRAGQUEENMOD.paperback_joker_patch()
+      end
     end
 
 
@@ -121,8 +132,26 @@ function DRAGQUEENMOD.cross_mod_content_register()
   -- Add Gemstones to modifiers
 end
 
+-- If paperback doesn't already have cross-mod integration with us, then we can modify some of their dark and light suit specific stuff to do so
+function DRAGQUEENMOD.paperback_joker_patch()
+  SMODS.Joker:take_ownership("paperback_solemn_lament",
+    {
+      loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = DRAGQUEENMOD.suit_tooltip("dark")
+        info_queue[#info_queue + 1] = DRAGQUEENMOD.suit_tooltip("light")
 
+        return {
+          vars = {
+            card.ability.extra.x_mult_mod,
+            card.ability.extra.x_mult
 
+          }
+        }
+      end,
+    },
+    true
+  )
+  end
 
 --- Whether to load stuff such as hands, planets and jokers related to Spectrums
 --- This mod defers to everyone else
