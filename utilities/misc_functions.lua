@@ -129,7 +129,14 @@ function DRAGQUEENMOD.get_unique_suits(scoring_hand, bypass_debuff, flush_calc)
   return num_suits
 end
 
-
+-- Fetches the current used prefix for a loaded mod if that prefix has recently changed
+---@param name string
+---@param guessedprefix string | nil
+function DRAGQUEENMOD.getprefix(name, guessedprefix)
+  assert(next(SMODS.find_mod(name)), "mod \"" .. name .. "\" not found in SMODS.find_mod()")
+  local foundprefix = SMODS.find_mod(name)[1].prefix or guessedprefix
+  return foundprefix
+end 
 
 ---@param set string
 ---@param key string
@@ -139,7 +146,7 @@ end
 -- Returned table has a name string, and a text table of one or more strings
 function DRAGQUEENMOD.easydescriptionlocalize(set, key)
   local localized
-  assert(G.localization.descriptions[set], "Could not find " .. set " in localization.descriptions")
+  assert(G.localization.descriptions[set], "Could not find " .. set .. " in descriptions")
   localized = assert(G.localization.descriptions[set][key], "Could not find " .. key .. " in " .. set)
   return localized
 end
@@ -152,7 +159,7 @@ end
 -- Returned table is either a string, or a table of strings
 function DRAGQUEENMOD.easymisclocalize(set, key)
   local localized
-  assert(G.localization.misc[set], "Could not find " .. set " in localization.misc")
+  assert(G.localization.misc[set], "Could not find " .. set .. " in localization.misc")
   localized = assert(G.localization.misc[set][key], "Could not find " .. key .. " in " .. set)
   return localized
 end

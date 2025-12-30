@@ -1,9 +1,8 @@
 [manifest]
 version = "1.0.0"
 dump_lua = true
-priority = 0
+priority = 11
 
-# Drag Queen mod specific
 [[patches]]
 [patches.pattern]
 target = "globals.lua"
@@ -13,10 +12,20 @@ match_indent = true
 payload = '''
 DRAGQUEEN_LIGHT_SUIT = HEX('F06841'),
 DRAGQUEEN_DARK_SUIT = HEX('3C4A4E'),
+DRAGQUEEN_PUMPS_LC = HEX('eec39a'),
+DRAGQUEEN_PUMPS_HC = HEX('eec39a'),
+DRAGQUEEN_PURSES_LC = HEX('ecb6db'),
+DRAGQUEEN_PURSES_LC = HEX('ecb6db'),
 '''
-# To put inside the triple quote above:
-# DRAGQUEEN_PUMPS_LC = HEX(""),
-# DRAGQUEEN_PUMPS_HC = HEX(""),
-# DRAGQUEEN_PURSES_LC = HEX(""),
-# DRAGQUEEN_PURSES_LC = HEX(""),
-# any other colors we wanna make
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = "G.ARGS.LOC_COLOURS = G.ARGS.LOC_COLOURS or {"
+position = "after"
+match_indent = true
+payload = '''
+  dragqueen_pumps = G.C.SUITS.dragqueen_Pumps or G.C.DRAGQUEEN_PUMPS_LC,
+  dragqueen_purses = G.C.SUITS.dragqueen_Purses or G.C.DRAGQUEEN_PURSES_LC,
+'''

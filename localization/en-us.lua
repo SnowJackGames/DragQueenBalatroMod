@@ -7,6 +7,7 @@
 -- in "misc{}", the localization table must follow the strict types outlined by Balatro's misc_functions.lua:function localize
 -- but there's more flexibility with sets in "descriptions{}", as called with
 -- ex. localize{"name_text",key = "",set}
+-- Capitalize tooltip text like a book title
 
 -- Colors implemented in lovely/colors.toml
 -- {C:hearts}
@@ -52,198 +53,6 @@ return {
       },
       -- Patching vanilla jokers
       -- Patching other mods' jokers
-    },
-    Suit = {
-      dragqueen_plain_suits = {
-        name = "Plain suits",
-        text = {
-          "{C:spades}Spades{}, {C:hearts}Hearts{},",
-          "{C:clubs}Clubs{} and {C:diamonds}Diamonds{}"
-        }
-      },
-      dragqueen_accessory_suits = {
-        name = "Accessory suits",
-        text = {
-          "{C:dragqueen_purses}Purses{} and{C:dragqueen_pumps}Pumps{}"
-        }
-      },
-      -- Implemented by Bunco
-      -- Already has dark / light alignment
-      dragqueen_bunc_exotic_suits = {
-        name = "Exotic suits",
-        text = {
-          "{C:bunc_halberds}Halberds{} and {C:bunc_fleurons}Fleurons{}"
-        }
-      },
-      -- Implemented by Paperback
-      -- Already has dark / light alignment
-      dragqueen_paperback_proud_suits = {
-        name = "Proud suits",
-        text = {
-          "{C:paperback_crowns}Crowns{} and {C:paperback_stars}Stars{}"
-        }
-      },
-      -- Implemented by Six Suits
-      -- Giving them dark / light alignment
-      dragqueen_six_night_suits = {
-        name = "Night suits",
-        text = {
-          "{C:six_moons}Moons{} and {C:six_stars}Stars{}"
-        }
-      },
-      -- Implemented by Minty's Silly Little Mod
-      -- 3s considered light by Paperback
-      dragqueen_minty_treat_suit = {
-        name = "Treat suit",
-        text = {
-          "{C:minty_3s}3s{}"
-        }
-      },
-      -- Implemented by Magic: The Jokering
-      -- Not giving them a dark / light alignment
-      dragqueen_mtg_magic_suits = {
-        name = "Magic suits",
-        text = {
-          "{C:clover}Clovers{} and {C:FFFFFF}Suitless{}"
-        }
-      },
-      -- Implemented by Ink and Color
-      -- giving them dark / light alignment
-      dragqueen_ink_stained_suits = {
-        name = "Stained suits",
-        text = {
-          "{C:black,E:1,S:1.1}Ink{} and {C:purple,E:1,S:1.1}Color{}"
-        }
-      },
-      -- When deck only has plain suits
-      dragqueen_vanilla_dark_suits = {
-        name = "Dark suits",
-        text = {
-          "{C:spades}Spades{} and {C:clubs}Clubs{}"
-        }
-      },
-      -- When deck has any non-plain suit
-      dragqueen_vanilla_plus_dark_suits = {
-        name = "Dark suits",
-        text = {
-          "{C:spades}Spades{}, {C:clubs}Clubs{}"
-        }
-      },
-      -- Dynamically generated through UI.lua:DRAGQUEENMOD.suit_tooltip()
-      dragqueen_dark_suits_in_play = {
-        name = "Dark suits",
-        text = {
-        }
-      },
-      dragqueen_accessory_dark_suits = {
-        name = "Accessory dark suits",
-        text = {
-          "{C:dragqueen_purses}Purses{}"
-        }
-      },
-      -- Bunco
-      dragqueen_bunc_dark_suits = {
-        name = "Exotic dark suits",
-        text = {
-          "{C:bunc_halberds}Halberds{}"
-        }
-      },
-      -- Paperback
-      dragqueen_paperback_dark_suits = {
-        name = "Proud dark suits",
-        text = {
-          "{C:paperback_crowns}Crowns{}"
-        }
-      },
-      -- Minty's Silly Little Mod
-      dragqueen_minty_dark_suits = {
-        name = "Treat dark suits",
-        text = {
-          ""
-        }
-      },
-      -- Six Suits
-      dragqueen_six_dark_suits = {
-        name = "Night dark suits",
-        text = {
-          "{C:six_moons}Moons{}"
-        }
-      },
-      -- Ink and Color
-      dragqueen_ink_dark_suits = {
-        name = "Stained dark suits",
-        text = {
-          "{C:black,E:1,S:1.1}Ink{}"
-        }
-      },
-      -- When deck only has plain suits
-      dragqueen_vanilla_light_suits = {
-        name = "Light suits",
-        text = {
-          "{C:hearts}Hearts{} and {C:diamonds}Diamonds{}"
-        }
-      },
-      -- When deck has any non-plain suit
-      dragqueen_vanilla_plus_light_suits = {
-        name = "Light suits",
-        text = {
-          "{C:hearts}Hearts{}, {C:diamonds}Diamonds{}"
-        }
-      },
-      dragqueen_accessory_light_suits = {
-        name = "Accessory light suits",
-        text = {
-          "{C:dragqueen_pumps}Pumps{}"
-        }
-      },
-      -- Dynamically generated through UI.lua:DRAGQUEENMOD.suit_tooltip()
-      dragqueen_light_suits_in_play = {
-        name = "Light suits",
-        text = {
-        }
-      },
-      -- Bunco
-      dragqueen_bunco_light_suits = {
-        name = "Exotic light suits",
-        text = {
-          "{C:bunc_fleurons}Fleurons{}"
-        },
-      },
-      -- Paperback
-      dragqueen_paperback_light_suits = {
-        name = "Proud light suits",
-        text = {
-          "{C:paperback_stars}Stars{}"
-        }
-      },
-      -- Six Suits
-      dragqueen_six_light_suits = {
-        name = "Night light suits",
-        text = {
-          "{C:six_stars}Stars{}"
-        }
-      },
-      -- Minty's Silly Little Mod
-      dragqueen_minty_light_suits = {
-        name = "Treat light suits",
-        text = {
-          "{C:minty_3s}3s{}"
-        },
-      },
-      -- Magic: The Jokering
-      dragqueen_mtg_light_suits = {
-        name = "Magic light suits",
-        text = {
-          ""
-        }
-      },
-      -- Ink and Color
-      dragqueen_ink_light_suits = {
-        name = "Stained light suits",
-        text = {
-          "{C:purple,E:1,S:1.1}Color{}"
-        }
-      }
     },
     Rank = {
     },
@@ -447,6 +256,190 @@ return {
           "to {C:attention}Cross-Mod Content{} being",
           "disabled in {C:legendary}Drag Queen Mod{}"
         }
+      },
+      
+      dragqueen_plain_suits = {
+        name = "Plain Suits",
+        text = {
+          "{C:spades}Spades{}, {C:hearts}Hearts{},",
+          "{C:clubs}Clubs{} and {C:diamonds}Diamonds{}"
+        }
+      },
+      dragqueen_accessory_suits = {
+        name = "Accessory Suits",
+        text = {
+          "{C:dragqueen_purses}Purses{} and{C:dragqueen_pumps}Pumps{}"
+        }
+      },
+      -- Implemented by Bunco
+      -- Already has dark / light alignment
+      dragqueen_bunc_exotic_suits = {
+        name = "Exotic Suits",
+        text = {
+          "{C:bunc_halberds}Halberds{} and {C:bunc_fleurons}Fleurons{}"
+        }
+      },
+      -- Implemented by Paperback
+      -- Already has dark / light alignment
+      dragqueen_paperback_proud_suits = {
+        name = "Proud Suits",
+        text = {
+          "{C:paperback_crowns}Crowns{} and {C:paperback_stars}Stars{}"
+        }
+      },
+      -- Implemented by Six Suits
+      -- Giving them dark / light alignment
+      dragqueen_six_night_suits = {
+        name = "Night Suits",
+        text = {
+          "{C:six_moons}Moons{} and {C:six_stars}Stars{}"
+        }
+      },
+      -- Implemented by Minty's Silly Little Mod
+      -- 3s considered light by Paperback
+      dragqueen_minty_treat_suit = {
+        name = "Treat Suit",
+        text = {
+          "{C:minty_3s}3s{}"
+        }
+      },
+      -- Implemented by Magic: The Jokering
+      -- Not giving them a dark / light alignment
+      dragqueen_mtg_magic_suits = {
+        name = "Magic Suits",
+        text = {
+          "{C:clover}Clovers{} and {C:FFFFFF}Suitless{}"
+        }
+      },
+      -- Implemented by Ink and Color
+      -- giving them dark / light alignment
+      dragqueen_ink_stained_suits = {
+        name = "Stained Suits",
+        text = {
+          "{C:black,E:1,S:1.1}Ink{} and {C:purple,E:1,S:1.1}Color{}"
+        }
+      },
+      -- When deck only has plain suits
+      dragqueen_vanilla_dark_suits = {
+        name = "Dark Suits",
+        text = {
+          "{C:spades}Spades{} and {C:clubs}Clubs{}"
+        }
+      },
+      -- When deck has any non-plain suit
+      dragqueen_vanilla_plus_dark_suits = {
+        name = "Dark Suits",
+        text = {
+          "{C:spades}Spades{}, {C:clubs}Clubs{}"
+        }
+      },
+      dragqueen_accessory_dark_suits = {
+        name = "Accessory Dark Suits",
+        text = {
+          "{C:dragqueen_purses}Purses{}"
+        }
+      },
+      -- Bunco
+      dragqueen_bunc_dark_suits = {
+        name = "Exotic Dark Suits",
+        text = {
+          "{C:bunc_halberds}Halberds{}"
+        }
+      },
+      -- Paperback
+      dragqueen_paperback_dark_suits = {
+        name = "Proud Dark Suits",
+        text = {
+          "{C:paperback_crowns}Crowns{}"
+        }
+      },
+      -- Six Suits
+      dragqueen_six_dark_suits = {
+        name = "Night Dark Suits",
+        text = {
+          "{C:six_moons}Moons{}"
+        }
+      },
+      -- Ink and Color
+      dragqueen_ink_dark_suits = {
+        name = "Stained Dark Suits",
+        text = {
+          "{C:black,E:1,S:1.1}Ink{}"
+        }
+      },
+      -- When deck only has plain suits
+      dragqueen_vanilla_light_suits = {
+        name = "Light Suits",
+        text = {
+          "{C:hearts}Hearts{} and {C:diamonds}Diamonds{}"
+        }
+      },
+      -- When deck has any non-plain suit
+      dragqueen_vanilla_plus_light_suits = {
+        name = "Light Suits",
+        text = {
+          "{C:hearts}Hearts{}, {C:diamonds}Diamonds{}"
+        }
+      },
+      dragqueen_accessory_light_suits = {
+        name = "Accessory Light Suits",
+        text = {
+          "{C:dragqueen_pumps}Pumps{}"
+        }
+      },
+      -- Bunco
+      dragqueen_bunc_light_suits = {
+        name = "Exotic Light Suits",
+        text = {
+          "{C:bunc_fleurons}Fleurons{}"
+        },
+      },
+      -- Paperback
+      dragqueen_paperback_light_suits = {
+        name = "Proud Light Suits",
+        text = {
+          "{C:paperback_stars}Stars{}"
+        }
+      },
+      -- Six Suits
+      dragqueen_six_light_suits = {
+        name = "Night Light Suits",
+        text = {
+          "{C:six_stars}Stars{}"
+        }
+      },
+      -- Minty's Silly Little Mod
+      dragqueen_minty_light_suits = {
+        name = "Treat Light Suits",
+        text = {
+          "{C:minty_3s}3s{}"
+        },
+      },
+      -- Magic: The Jokering
+      dragqueen_mtg_light_suits = {
+        name = "Magic Light Suits",
+        text = {
+          ""
+        }
+      },
+      -- Ink and Color
+      dragqueen_ink_light_suits = {
+        name = "Stained Light Suits",
+        text = {
+          "{C:purple,E:1,S:1.1}Color{}"
+        }
+      },
+      -- Dynamically generated through UI.lua:DRAGQUEENMOD.suit_tooltip()
+      dragqueen_dark_suits_in_play = {
+        name = "Dark Suits",
+        text = {
+        }
+      },
+      -- Dynamically generated through UI.lua:DRAGQUEENMOD.suit_tooltip()
+      dragqueen_light_suits_in_play = {
+        name = "Light Suits",
+        text = {
+        }
       }
     }
   },
@@ -465,6 +458,7 @@ return {
       dragqueen_UI_vanilla_reworks_enabled = "Enable Vanilla Reworks",
       dragqueen_UI_cross_mod_enabled = "Enable Cross-Mod Content",
       dragqueen_ui_requires_restart = "Requires Restart"
+      
     },
     v_dictionary = {
       -- Variable information; like challenges_completed = "Completed#1#/#2# Challenges"
@@ -473,12 +467,12 @@ return {
       dragqueen_mother = "Mother"
     },
     suits_singular = {
-      dragqueen_pumps = "Pump",
-      dragqueen_purses = "Purse"
+      dragqueen_Pumps = "Pump",
+      dragqueen_Purses = "Purse"
     },
     suits_plural = {
-      dragqueen_pumps = "Pumps",
-      dragqueen_purses = "Purses"
+      dragqueen_Pumps = "Pumps",
+      dragqueen_Purses = "Purses"
     },
     poker_hands = {
       ["dragqueen_Spectrum"] = "Spectrum",

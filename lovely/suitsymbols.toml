@@ -1,0 +1,18 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 11
+
+# Text icons
+[[patches]]
+[patches.pattern]
+target = 'functions/misc_functions.lua'
+pattern = "Clubs = '♣',"
+position = 'after'
+match_indent = true
+payload = '''
+dragqueen_Pumps = '',
+dragqueen_Purses = '',
+'''
+
+

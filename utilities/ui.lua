@@ -125,23 +125,24 @@ function DRAGQUEENMOD.suit_tooltip(type)
   -- if the only suits in play (in G.GAME) are plain (Clubs, Hearts, Spades, Diamonds)
   -- then only show G.localization.descriptions.dragqueen_dark_suits_vanilla
   -- or etc light_suits_vanilla
-  -- HOWEVER: if there are other suits in play then we gotta check each mod
+  -- HOWEVER: if there are other suits in play (or we're looking at a card from Collection) then we gotta check each mod
   -- if *one* of the non-plain suits are in play, consider all cross mod suits in play
   -- see the en-us.lua notes
   if type == "dark" or "light" then
     local suits = type == "light" and DRAGQUEENMOD.light_suits or DRAGQUEENMOD.dark_suits
-    -- if playing with only plain suits, only display the vanilla suits; ex. dragqueen_vanilla_dark_suits
-    if not G.GAME.NonPlain then
+    -- if in game and playing with only plain suits, only display the vanilla suits; ex. dragqueen_vanilla_dark_suits
+    if G.Game and not G.GAME.NonPlain then
       key = key .. "vanilla_" .. type .. "_suits"
       
     -- Since any modded suits are in play, we consider all of them in play
     -- Let's dynamically add them all to localization, first figuring out what mods even there are
     else
+      key = key .. type .. "_suits_in_play"
       local mod_names = {
         "Bunco",
-        "Paperback",
-        "SixSuits",
+        "paperback",
         "MintysSillyMod",
+        "SixSuits",
         "magic_the_jokering",
         "InkAndColor"
       }
@@ -157,35 +158,54 @@ function DRAGQUEENMOD.suit_tooltip(type)
       -- Referencing G.localization.grammar for conjunction order
       -- Starting out with adding the vanilla and drag queen suits
       -- Each item in messageparts is a table of text tables
-      local messageparts = {
-        DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction1").text,
-        DRAGQUEENMOD.easydescriptionlocalize("Suit","dragqueen_vanilla_plus_" .. type .. "_suits").text,
-      }
-      if #suits == 3 then
+      local messageparts = {}
+      table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction1").text)
+      table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Other","dragqueen_vanilla_plus_" .. type .. "_suits").text)
+      if next(mods_in_play) == nil then
         table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction4").text)
-        table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Suit", "dragqueen_accessory_" .. type .. "_suits").text)
+        table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Other", "dragqueen_accessory_" .. type .. "_suits").text)
       else
-        table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction3"))
-        table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Suit", "dragqueen_accessory_" .. type .. "_suits").text)
+        table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction3").text)
+        table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Other", "dragqueen_accessory_" .. type .. "_suits").text)
 
         -- Now, if there's any modded suits we add those to messageparts
         for _, modname in ipairs(mods_in_play) do
-          -- i.e. last modded suit to be added
-          if DRAGQUEENMOD.indexof(mods_in_play, modname) == #(suits - 3) then
-            table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction4").text)
-            table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Suit", "dragqueen_" .. DRAGQUEENMOD.guessedprefix(modname) .. "_" .. type .. "_suits").text)
-          -- i.e. there's more modded suits after this one
-          else
-            table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction3").text)
-            table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Suit", "dragqueen_" .. DRAGQUEENMOD.guessedprefix(modname) .. "_" .. type .. "_suits").text)
+          -- First we check to make sure that mod does have the category of light and dark suits (ex. MintysSillyMod only has a light suit)
+          if pcall(DRAGQUEENMOD.easydescriptionlocalize, "Other", "dragqueen_" .. DRAGQUEENMOD.getprefix(modname) .. "_" .. type .. "_suits") then
+            -- i.e. if this is the last modded suit to be added
+            if DRAGQUEENMOD.indexof(mods_in_play, modname) == #mods_in_play then
+              table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction4").text)
+              table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Other", "dragqueen_" .. DRAGQUEENMOD.getprefix(modname) .. "_" .. type .. "_suits").text)
+            -- i.e. there's more modded suits after this one
+            else
+              table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction3").text)
+              table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Other", "dragqueen_" .. DRAGQUEENMOD.getprefix(modname) .. "_" .. type .. "_suits").text)
+            end
           end
         end
         table.insert(messageparts, DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction5").text)
       end
 
-      -- Now we have all the messageparts, let's extract the strings from the text tables
+      -- This is complicated, but if for some reason conjunction 4 is in messageparts,
+      -- (Ex. A case where a mod has a light suit but not a dark suit, so it skips over adding conj4 for their nonexistant dark suit)
+      -- Then we have to insert conj4 at the correct position; third to last.
+      local conj4exists = false
+      local messagepartslength = 0
+      for _, texttable in ipairs(messageparts) do
+        messagepartslength = messagepartslength + 1
+        if texttable == DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction4").text then
+          conj4exists = true
+        end
+      end
+
+      if conj4exists == false then
+        messageparts[messagepartslength - 2] = DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction4").text
+      end
+
+
+      -- Now we have all the messageparts text tables, let's extract the strings into a simpler table of strings
       local messagestrings = {}
-      for _, texttable in ipairs(mods_in_play) do
+      for _, texttable in ipairs(messageparts) do
         for _, textstring in ipairs(texttable) do
           table.insert(messagestrings, textstring)
         end
@@ -194,20 +214,24 @@ function DRAGQUEENMOD.suit_tooltip(type)
       -- Now we take all those strings and put them into "lines" of text that you'd see on the screen. We don't want those to be overly long
       local line = ""
       local text = {}
+      local textparsed = {}
+      local conj3 = DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction3").text[1]
+      local conj4 = DRAGQUEENMOD.easydescriptionlocalize("Grammar", "dragqueen_suit_conjunction4").text[1]
       for _, textstring in ipairs(messagestrings) do
         -- Line has room, we can keep typing
-        if line < 30 then
+
+        if (string.len(line) < 35) or (textstring == conj3) or (textstring == conj4) then
           line = line .. textstring
         -- Typewriter goes "ding!", next line
         else
-          text[#text+1] = line
-          line = ""
+          table.insert(text, line)
+          line = textstring
         end
       end
 
       -- Put the last line in
-      if #line > 0 then
-        text[#text + 1] = line
+      if string.len(line) > 0 then
+        table.insert(text, line)
       end
 
       -- We also gotta get all the "colours" for the suits
@@ -216,17 +240,15 @@ function DRAGQUEENMOD.suit_tooltip(type)
         colours[#colours+1] = G.C.SUITS[suit] or G.C.IMPORTANT
       end
 
-      -- For the grand finale we take our table of text and give it back to localization
-      -- I might have to do something with .text_parsed format and loc_parse_string? I hope giving it the same text is okay
-      if type == "dark" then
-        G.localization.descriptions.Suit.dragqueen_dark_suits_in_play.text = text
-        G.localization.descriptions.Suit.dragqueen_dark_suits_in_play.text_parsed = text
-        key = "dragqueen_dark_suits_in_play"
-      else
-        G.localization.descriptions.Suit.dragqueen_light_suits_in_play.text = text
-        G.localization.descriptions.Suit.dragqueen_light_suits_in_play.text_parsed = text
-        key = "dragqueen_light_suits_in_play"
+      -- We let Balatro's misc_functions.lua:loc_parse_string() handle the text
+      for _, v in ipairs(text) do
+        textparsed[#textparsed+1] = loc_parse_string(v)
       end
+
+      -- For the grand finale we take our table of text and give it back to localization
+      G.localization.descriptions.Other[key].text = text
+      G.localization.descriptions.Other[key].text_parsed = textparsed
+
     end
   end
 
@@ -234,13 +256,10 @@ function DRAGQUEENMOD.suit_tooltip(type)
   return {
     -- Balatro's functions/common_events.lua:function generate_card_ui() builds a full_UI_table.name
     -- which is parsed with Balatro's functions/misc_functions.lua:function localize(args, misc_cat)
-    -- This return gets sent to localize() with type "descriptions", and using the suit and key the text table is given to loc_target
+    -- This return gets sent to localize() with type "Other", and using the suit and key the text table is given to loc_target
 
     -- "Colours" here comes from Balatro's own Canadian code
-    -- It might be needed to pass in the ex. "{V:1}Spades{}" format?
-    -- If that's the case I'll need to reformat the above from the {C:Dragqueen_Purses}Purses{}" format
-    type = "descriptions",
-    set = "Suit",
+    set = "Other",
     key = key,
     vars = {
       colours = colours
