@@ -3,7 +3,7 @@ SMODS.Joker {
     effect = "Suit Mult",
     config = {
         extra = {
-            s_mult = 5,
+            s_mult = 7,
             suit = "dragqueen_purses"
         }
     },
