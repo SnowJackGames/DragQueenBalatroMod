@@ -162,6 +162,7 @@ DRAGQUEENMOD.CONSUMABLES = {
 DRAGQUEENMOD.JOKERS = {
     "broke_joker",
     "vain_joker",
+    "lipstick",
     "tights"
 }
 

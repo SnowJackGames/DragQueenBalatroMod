@@ -51,6 +51,14 @@ return {
           "{C:mult}+#1#{} Mult when scored"
         }
       },
+      j_dragqueen_lipstick = {
+        name = "Lipstick",
+        text = {
+          "{C:green}#1# in #2#{} chance for played",
+          "cards with {C:dragqueen_purses}Purse{} suit to give",
+          "{C:money}X#3#{} Money when scored"
+        }
+      },
       j_dragqueen_tights = {
         name = "Tights",
         text = {
